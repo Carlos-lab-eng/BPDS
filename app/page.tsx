@@ -10,6 +10,7 @@ interface Tarea {
 
 export default function Home() {
   const [tareas, setTareas] = useState<Tarea[]>([]);
+  const [papelera, setPapelera] = useState<Tarea[]>([]);
   const [nuevaTarea, setNuevaTarea] = useState("");
   const [editandoId, setEditandoId] = useState<number | null>(null);
   const [textoEditado, setTextoEditado] = useState("");
@@ -66,6 +67,10 @@ export default function Home() {
   };
 
   const eliminarTarea = (id: number) => {
+    const tareaEliminada = tareas.find((tarea) => tarea.id === id);
+    if (tareaEliminada) {
+      setPapelera((actuales) => [...actuales, tareaEliminada]);
+    }
     setTareas((actuales) =>
       actuales.filter((tarea) => tarea.id !== id)
     );
@@ -144,13 +149,23 @@ export default function Home() {
               </button>
             </div>
           ))}
+          <p>Tareas pendientes: {tareas.length}</p>
         </div>
+      
 
         {tareas.length === 0 && (
           <p className="mensaje-vacio">
             No tienes tareas pendientes.
           </p>
         )}
+        <div className = "papelera">
+          <h2> Papelera</h2>
+          {papelera.map((tarea)=> (
+            <div key = {tarea.id}>
+              {tarea.texto}
+              </div>
+              ))}
+        </div>
       </section>
     </main>
   );
